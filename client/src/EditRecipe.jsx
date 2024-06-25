@@ -1,7 +1,7 @@
 // src/components/EditRecipe.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const EditRecipe = () => {
   const { id } = useParams();
@@ -30,15 +30,26 @@ const EditRecipe = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.put(`http://localhost:8000/recipes/${id}/`, recipe)
-      .then(response => {
-        history.push('/recipes');
-      })
-      .catch(error => {
-        console.error(error);
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const response = await axios.put(`http://localhost:8000/recipes/${id}/`, recipe)
+      console.log(response.data);
+      toast.success('Data updated successfully', {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Slide,
       });
+    } catch (error) {
+      console.error(error);
+    }
+    axios.put(`http://localhost:8000/recipes/${id}/`, recipe)
   };
 
   return (
